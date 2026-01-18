@@ -8,4 +8,25 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FootballDirector.Server\FootballDirector.Server.csproj" />
+  </ItemGroup>
+
+  <!-- Copy wwwroot and LLM from Server output after build -->
+  <Target Name="CopyServerAssets" AfterTargets="Build">
+    <PropertyGroup>
+      <ServerOutputDir>..\FootballDirector.Server\bin\$(Configuration)\net10.0\</ServerOutputDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <WwwrootFiles Include="$(ServerOutputDir)wwwroot\**\*" />
+      <LlmFiles Include="$(ServerOutputDir)LLM\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(WwwrootFiles)" DestinationFolder="$(OutputPath)wwwroot\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(LlmFiles)" DestinationFolder="$(OutputPath)LLM\%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
+
 </Project>
