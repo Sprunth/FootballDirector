@@ -1,0 +1,131 @@
+.footballer-container {
+    padding: 1rem;
+}
+
+.footballer-container h2 {
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.footballer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.footballer-card {
+    background: linear-gradient(145deg, #2a2a3e, #1a1a2e);
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+}
+
+.footballer-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.footballer-card.selected {
+    border-color: #646cff;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.overall-rating {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4ade80;
+}
+
+.position {
+    background: #646cff;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.card-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.player-detail {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.player-detail h3 {
+    margin: 0 0 1rem 0;
+    color: #fff;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.stat-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-label {
+    width: 40px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #888;
+}
+
+.stat-track {
+    flex: 1;
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.stat-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.stat-value {
+    width: 30px;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.loading, .error {
+    padding: 2rem;
+    text-align: center;
+}
+
+.error {
+    color: #f87171;
+}

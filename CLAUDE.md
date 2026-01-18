@@ -63,3 +63,4 @@ React builds output to `FootballDirector.Server/wwwroot`. Desktop app copies the
 - All C# projects use nullable reference types (`<Nullable>enable</Nullable>`)
 - Desktop app auto-selects free port for local server
 - This is a one-person project and prototype. Do not overbuild. It is OK to hardcode things, skip abstractions.
+- Make choices that are friendly to AI coding agents.

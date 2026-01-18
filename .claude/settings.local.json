@@ -6,7 +6,11 @@
       "Bash(dir \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Server\\\\wwwroot\" /s)",
       "Bash(del \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Core\\\\Class1.cs\")",
       "WebSearch",
-      "Bash(dotnet run:*)"
+      "Bash(dotnet run:*)",
+      "Bash(del \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Contracts\\\\Class1.cs\")",
+      "Bash(npm install:*)",
+      "Bash(curl:*)",
+      "Bash(npx openapi-typescript:*)"
     ]
   }
 }

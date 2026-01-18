@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import { FootballerList } from './components/FootballerList'
 
 function App() {
   const [llmResponse, setLlmResponse] = useState(null)
@@ -30,6 +31,9 @@ function App() {
   return (
     <>
       <h1>Football Director</h1>
+
+      <FootballerList />
+
       <div className="card">
         <h2>LLM Test</h2>
         <button onClick={testLlm} disabled={loading}>

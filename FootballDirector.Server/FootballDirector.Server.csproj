@@ -21,6 +21,7 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\FootballDirector.Core\FootballDirector.Core.csproj" />
+    <ProjectReference Include="..\FootballDirector.Contracts\FootballDirector.Contracts.csproj" />
   </ItemGroup>
 
   <!-- Ensure wwwroot files are copied to output directory -->
