@@ -1,33 +1,54 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [llmResponse, setLlmResponse] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const testLlm = async () => {
+    setLoading(true)
+    setError(null)
+    setLlmResponse(null)
+
+    try {
+      const response = await fetch('/api/llm/test', { method: 'POST' })
+      const data = await response.json()
+
+      if (response.ok) {
+        setLlmResponse(data.text)
+      } else {
+        setError(data.error || 'Unknown error')
+      }
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+      <h1>Football Director</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <h2>LLM Test</h2>
+        <button onClick={testLlm} disabled={loading}>
+          {loading ? 'Generating...' : 'Generate Football Character'}
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+        {error && (
+          <div style={{ color: 'red', marginTop: '1rem' }}>
+            Error: {error}
+          </div>
+        )}
+
+        {llmResponse && (
+          <div style={{ marginTop: '1rem', textAlign: 'left', padding: '1rem', background: '#1a1a1a', borderRadius: '8px' }}>
+            <strong>Generated Character:</strong>
+            <p>{llmResponse}</p>
+          </div>
+        )}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }

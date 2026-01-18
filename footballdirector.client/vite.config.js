@@ -7,5 +7,14 @@ export default defineConfig({
   build: {
     outDir: '../FootballDirector.Server/wwwroot',
     emptyDirBeforeWrite: true
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://localhost:7153',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 })

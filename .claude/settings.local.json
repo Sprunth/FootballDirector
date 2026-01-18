@@ -3,7 +3,10 @@
     "allow": [
       "Bash(dotnet build:*)",
       "Bash(dir \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Desktop\\\\bin\\\\Debug\\\\net10.0-windows\\\\wwwroot\")",
-      "Bash(dir \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Server\\\\wwwroot\" /s)"
+      "Bash(dir \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Server\\\\wwwroot\" /s)",
+      "Bash(del \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Core\\\\Class1.cs\")",
+      "WebSearch",
+      "Bash(dotnet run:*)"
     ]
   }
 }
