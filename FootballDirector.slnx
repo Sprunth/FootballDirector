@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="footballdirector.client/footballdirector.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="FootballDirector.Contracts/FootballDirector.Contracts.csproj" />
+  <Project Path="FootballDirector.Core/FootballDirector.Core.csproj" />
+  <Project Path="FootballDirector.Desktop/FootballDirector.Desktop.csproj" />
+  <Project Path="FootballDirector.Server/FootballDirector.Server.csproj" />
+</Solution>

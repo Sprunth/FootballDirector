@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)",
+      "Bash(dir \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Desktop\\\\bin\\\\Debug\\\\net10.0-windows\\\\wwwroot\")",
+      "Bash(dir \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Server\\\\wwwroot\" /s)"
+    ]
+  }
+}
