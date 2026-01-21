@@ -34,10 +34,10 @@ Open `FootballDirector.slnx` in Visual Studio and run with both `FootballDirecto
 
 ### Solution Structure
 
-- **footballdirector.client/** - React SPA frontend (Vite, JSX)
-- **FootballDirector.Server/** - ASP.NET Core web host (not game logic)
-- **FootballDirector.Core/** - Game logic library (placeholder)
-- **FootballDirector.Contracts/** - Request/Response DTOs (placeholder)
+- **footballdirector.client/** - React SPA frontend (Vite, Tailwind, shadcn/ui pattern). See `footballdirector.client/CLAUDE.md` for frontend-specific guidance.
+- **FootballDirector.Server/** - ASP.NET Core web host (controllers, not game logic)
+- **FootballDirector.Core/** - Game logic library and LLM services
+- **FootballDirector.Contracts/** - Shared DTOs (Person, Footballer, Staff types, Club, Conversation)
 - **FootballDirector.Desktop/** - Windows WPF shell with WebView2
 
 ### Deployment Modes
@@ -56,6 +56,14 @@ Open `FootballDirector.slnx` in Visual Studio and run with both `FootballDirecto
 
 React builds output to `FootballDirector.Server/wwwroot`. Desktop app copies these files at build time.
 
+## Game Design Philosophy
+
+- Player is **Director of Football** (not match-day manager) — focus on squad building, transfers, hiring staff, club strategy
+- LLM integration makes NPCs feel intelligent and reactive — conversations, negotiations, personality-driven behavior
+- UI aesthetic: **"Fake professional with a twinge of quirky"** — sports broadcast feel, not a toy or spreadsheet
+- Fun stories on the edge of believable — the LLM content provides personality, not the UI styling
+- Start simple, add complexity only when proven necessary
+
 ## Development Notes
 
 - OpenAPI available at `/openapi/v1.json` in Development environment only
@@ -65,3 +73,4 @@ React builds output to `FootballDirector.Server/wwwroot`. Desktop app copies the
 - This is a one-person project and prototype. Do not overbuild. It is OK to hardcode things, skip abstractions.
 - Make choices that are friendly to AI coding agents.
 - Use fictional names for all game entities (players, staff, clubs). Do not use real-world football players or teams, even for test data.
+- Controllers should be lightweight — complex logic goes in services in the Core project.
