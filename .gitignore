@@ -430,3 +430,8 @@ FodyWeavers.xsd
 
 # LLM model files
 *.gguf
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal

@@ -36,8 +36,8 @@ Open `FootballDirector.slnx` in Visual Studio and run with both `FootballDirecto
 
 - **footballdirector.client/** - React SPA frontend (Vite, Tailwind, shadcn/ui pattern). See `footballdirector.client/CLAUDE.md` for frontend-specific guidance.
 - **FootballDirector.Server/** - ASP.NET Core web host (controllers, not game logic)
-- **FootballDirector.Core/** - Game logic library and LLM services
-- **FootballDirector.Contracts/** - Shared DTOs (Person, Footballer, Staff types, Club, Conversation)
+- **FootballDirector.Core/** - Game logic library, LLM services, and data access (`Data/GameDbContext.cs`)
+- **FootballDirector.Contracts/** - Shared types used as both API DTOs and EF Core entities
 - **FootballDirector.Desktop/** - Windows WPF shell with WebView2
 
 ### Deployment Modes
@@ -74,3 +74,34 @@ React builds output to `FootballDirector.Server/wwwroot`. Desktop app copies the
 - Make choices that are friendly to AI coding agents.
 - Use fictional names for all game entities (players, staff, clubs). Do not use real-world football players or teams, even for test data.
 - Controllers should be lightweight — complex logic goes in services in the Core project.
+
+## Data Layer
+
+### SQLite + EF Core
+
+- Database: SQLite file at `Data/footballdirector.db` (relative to executable, auto-created on startup)
+- ORM: Entity Framework Core with `GameDbContext` in `FootballDirector.Core/Data/`
+- **Single model approach**: Contract records (Footballer, StaffMember, Club, etc.) serve as both API DTOs and EF entities
+
+### EF Core with Records
+
+Contract types use C# records with positional parameters. To make them work with EF Core owned types (Personality, ClubFinances), each record has a private parameterless constructor:
+
+```csharp
+public record Footballer(...) : Person(...)
+{
+    // Required for EF Core to instantiate with owned types
+    private Footballer() : this(0, "", "", 0, "", new Personality(), "", 0, 0, 0, 0, 0, 0, 0) { }
+}
+```
+
+This is a known EF Core limitation — owned types can't be bound to constructor parameters. The private constructors are ugly but:
+- Hidden from public API
+- Necessary for single-model approach
+- Well-documented with comments
+
+### Key Files
+
+- `FootballDirector.Core/Data/GameDbContext.cs` — DbContext with owned type configuration
+- `FootballDirector.Core/Data/GameDataExtensions.cs` — DI registration + seed data
+- Database seeded automatically if empty on startup

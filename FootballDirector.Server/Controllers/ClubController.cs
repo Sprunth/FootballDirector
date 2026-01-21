@@ -1,33 +1,22 @@
 using FootballDirector.Contracts;
+using FootballDirector.Core.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FootballDirector.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ClubController : ControllerBase
+public class ClubController(GameDbContext db) : ControllerBase
 {
-    // Hardcoded club data for now - will come from game state service later
-    private static readonly Club CurrentClub = new(
-        Id: 1,
-        Name: "Ashworth United",
-        Stadium: "Greenfield Park",
-        League: "Premier Division",
-        LeaguePosition: 7,
-        Finances: new ClubFinances(
-            Balance: 12_500_000,
-            TransferBudget: 8_000_000,
-            WageBudget: 450_000,
-            CurrentWages: 385_000),
-        Counts: new ClubCounts(
-            Footballers: 8,     // Matches our hardcoded footballers
-            Staff: 6,           // Matches our hardcoded staff
-            UnreadMessages: 2));
-
     [HttpGet]
     [ProducesResponseType<Club>(StatusCodes.Status200OK)]
-    public ActionResult<Club> Get()
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<Club>> Get()
     {
-        return Ok(CurrentClub);
+        var club = await db.Clubs.FirstOrDefaultAsync();
+        if (club is null)
+            return NotFound();
+        return Ok(club);
     }
 }

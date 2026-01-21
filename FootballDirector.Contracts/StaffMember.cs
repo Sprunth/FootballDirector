@@ -55,4 +55,9 @@ public record StaffMember(
 
     // ClubOwner-specific
     long? Wealth,
-    int? Ambition);
+    int? Ambition)
+{
+    // Required for EF Core to instantiate with owned types
+    private StaffMember() : this(0, "", "", 0, "", new Personality(), StaffRole.Coach,
+        null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) { }
+}
