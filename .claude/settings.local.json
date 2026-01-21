@@ -10,7 +10,8 @@
       "Bash(del \"C:\\\\Programming\\\\Projects\\\\FootballDirector\\\\FootballDirector.Contracts\\\\Class1.cs\")",
       "Bash(npm install:*)",
       "Bash(curl:*)",
-      "Bash(npx openapi-typescript:*)"
+      "Bash(npx openapi-typescript:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FootballDirector.Server.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/footballers")]
 public class FootballerController : ControllerBase
 {
     private static readonly List<Footballer> Footballers =
