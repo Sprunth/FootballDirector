@@ -25,11 +25,19 @@ public enum PersonalityType
 public record Backstory(
     string Upbringing,
     string CoreMemory,
-    string FunFact);
+    string FunFact)
+{
+    // Required for EF Core
+    public Backstory() : this("", "", "") { }
+}
 
 /// <summary>
 /// Complete personality profile for any person in the game.
 /// </summary>
 public record Personality(
     PersonalityType Type,
-    Backstory Backstory);
+    Backstory Backstory)
+{
+    // Required for EF Core
+    public Personality() : this(PersonalityType.Maverick, new Backstory()) { }
+}

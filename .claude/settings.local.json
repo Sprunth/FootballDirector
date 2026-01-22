@@ -11,7 +11,12 @@
       "Bash(npm install:*)",
       "Bash(curl:*)",
       "Bash(npx openapi-typescript:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(timeout /t 8 /nobreak)",
+      "Bash(ping:*)",
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''http://localhost:5150/api/staff'' -UseBasicParsing | Select-Object -ExpandProperty Content\")",
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''http://localhost:5150/api/club'' -UseBasicParsing | Select-Object -ExpandProperty Content\")"
     ]
   }
 }

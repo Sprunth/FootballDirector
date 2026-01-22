@@ -13,7 +13,11 @@ public record Conversation(
     DateTime? LastMessageAt,
     bool IsRead,
     string? Subject,            // Optional conversation topic
-    List<Message> Messages);
+    List<Message> Messages)
+{
+    // Required for EF Core
+    private Conversation() : this(0, 0, "", "", false, default, null, false, null, []) { }
+}
 
 /// <summary>
 /// Summary for list views (without full message history).
@@ -38,4 +42,8 @@ public record Message(
     int ConversationId,
     bool FromPlayer,            // True = player sent, False = NPC sent
     string Content,
-    DateTime SentAt);
+    DateTime SentAt)
+{
+    // Required for EF Core
+    private Message() : this(0, 0, false, "", default) { }
+}
