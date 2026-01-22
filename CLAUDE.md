@@ -102,6 +102,50 @@ This is a known EF Core limitation — owned types can't be bound to constructor
 
 ### Key Files
 
+- `FootballDirector.Core/GameServiceExtensions.cs` — **Consolidated service registration** (database, LLM, future services)
 - `FootballDirector.Core/Data/GameDbContext.cs` — DbContext with owned type configuration
-- `FootballDirector.Core/Data/GameDataExtensions.cs` — DI registration + seed data
+- `FootballDirector.Core/Data/GameDataExtensions.cs` — Low-level DB registration + seed data
 - Database seeded automatically if empty on startup
+
+### Adding New Services
+
+All game services are registered via `GameServiceExtensions.cs`. When adding new services:
+
+1. Add registration in `AddGameServices()` method
+2. Add any initialization in `InitializeGame()` method
+3. All clients (Server, Desktop, future) automatically get the new service
+
+**Do NOT** duplicate service registration in individual host projects.
+
+### New Client Setup (Future Reference)
+
+When creating a new client (e.g., mobile, console, etc.), the minimal setup is:
+
+```csharp
+using FootballDirector.Core;
+using FootballDirector.Server.Controllers;
+
+var builder = WebApplication.CreateBuilder();
+
+// 1. Add controllers from Server assembly
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(LlmController).Assembly);
+
+// 2. Register all game services (DB, LLM, etc.) — ONE LINE
+builder.Services.AddGameServices(AppContext.BaseDirectory);
+
+var app = builder.Build();
+
+// 3. Initialize game state (creates/seeds DB) — ONE LINE
+app.Services.InitializeGame();
+
+// 4. Standard middleware
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapControllers();
+app.MapFallbackToFile("/index.html");
+
+app.Run();
+```
+
+See `FootballDirector.Desktop/LocalGameHost.cs` as a working example.

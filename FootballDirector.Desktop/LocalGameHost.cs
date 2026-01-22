@@ -1,12 +1,11 @@
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using FootballDirector.Core.LLM;
+using FootballDirector.Core;
 using FootballDirector.Server.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace FootballDirector.Desktop;
 
@@ -25,15 +24,13 @@ public class LocalGameHost : IDisposable
         builder.WebHost.UseUrls(BaseUrl);
         builder.Environment.WebRootPath = Path.Combine(AppContext.BaseDirectory, "wwwroot");
 
-        // Add services - include controllers from Server assembly
+        // Add controllers from Server assembly + all game services
         builder.Services.AddControllers()
             .AddApplicationPart(typeof(LlmController).Assembly);
-
-        var modelPath = Path.Combine(AppContext.BaseDirectory, "LLM", "LFM2.5-1.2B-Instruct-Q4_K_M.gguf");
-        modelPath = Path.GetFullPath(modelPath);
-        builder.Services.AddSingleton(new LlmTestService(modelPath));
+        builder.Services.AddGameServices(AppContext.BaseDirectory);
 
         _app = builder.Build();
+        _app.Services.InitializeGame();
 
         _app.UseDefaultFiles();
         _app.UseStaticFiles();

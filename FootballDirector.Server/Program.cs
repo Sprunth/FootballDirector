@@ -1,5 +1,4 @@
-using FootballDirector.Core.Data;
-using FootballDirector.Core.LLM;
+using FootballDirector.Core;
 
 namespace FootballDirector.Server
 {
@@ -9,24 +8,12 @@ namespace FootballDirector.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
-
-            // Register game database
-            var dbPath = Path.Combine(AppContext.BaseDirectory, "Data", "footballdirector.db");
-            Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
-            builder.Services.AddGameDatabase($"Data Source={dbPath}");
-
-            // Register LLM test service
-            var modelPath = Path.Combine(AppContext.BaseDirectory, "LLM", "LFM2.5-1.2B-Instruct-Q4_K_M.gguf");
-            modelPath = Path.GetFullPath(modelPath);
-            builder.Services.AddSingleton(new LlmTestService(modelPath));
+            builder.Services.AddGameServices(AppContext.BaseDirectory);
 
             var app = builder.Build();
-
-            // Ensure database is created and seeded
-            app.Services.EnsureGameDatabaseCreated();
+            app.Services.InitializeGame();
 
             app.UseDefaultFiles();
             app.MapStaticAssets();

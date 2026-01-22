@@ -16,7 +16,8 @@
       "Bash(timeout /t 8 /nobreak)",
       "Bash(ping:*)",
       "Bash(powershell -Command \"Invoke-WebRequest -Uri ''http://localhost:5150/api/staff'' -UseBasicParsing | Select-Object -ExpandProperty Content\")",
-      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''http://localhost:5150/api/club'' -UseBasicParsing | Select-Object -ExpandProperty Content\")"
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''http://localhost:5150/api/club'' -UseBasicParsing | Select-Object -ExpandProperty Content\")",
+      "Bash(powershell -Command \"Start-Sleep -Seconds 6; Get-Content ''C:\\\\Users\\\\Dylan\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Programming-Projects-FootballDirector\\\\tasks\\\\b4584e9.output''\")"
     ]
   }
 }
