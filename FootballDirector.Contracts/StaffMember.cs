@@ -21,7 +21,7 @@ public record StaffMember(
     int Id,
     string FirstName,
     string LastName,
-    int Age,
+    DateTime DateOfBirth,
     string Nationality,
     Personality Personality,
     StaffRole Role,
@@ -58,6 +58,6 @@ public record StaffMember(
     int? Ambition)
 {
     // Required for EF Core to instantiate with owned types
-    private StaffMember() : this(0, "", "", 0, "", new Personality(), StaffRole.Coach,
+    private StaffMember() : this(0, "", "", default, "", new Personality(), StaffRole.Coach,
         null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) { }
 }

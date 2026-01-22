@@ -52,3 +52,16 @@ export async function getPersonConversations(personId) {
     if (!response.ok) throw new Error(`Failed to fetch conversations: ${response.statusText}`);
     return response.json();
 }
+
+// Game Clock
+export async function getGameClock() {
+    const response = await fetch('/api/clock');
+    if (!response.ok) throw new Error(`Failed to fetch game clock: ${response.statusText}`);
+    return response.json();
+}
+
+export async function advanceGameClock(days = 1) {
+    const response = await fetch(`/api/clock/advance?days=${days}`, { method: 'POST' });
+    if (!response.ok) throw new Error(`Failed to advance clock: ${response.statusText}`);
+    return response.json();
+}

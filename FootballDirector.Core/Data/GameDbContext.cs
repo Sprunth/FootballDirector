@@ -10,6 +10,7 @@ public class GameDbContext : DbContext
     public DbSet<Club> Clubs => Set<Club>();
     public DbSet<Conversation> Conversations => Set<Conversation>();
     public DbSet<Message> Messages => Set<Message>();
+    public DbSet<GameClock> GameClock => Set<GameClock>();
 
     public GameDbContext(DbContextOptions<GameDbContext> options) : base(options) { }
 
@@ -20,6 +21,7 @@ public class GameDbContext : DbContext
         ConfigureClub(modelBuilder);
         ConfigureConversation(modelBuilder);
         ConfigureMessage(modelBuilder);
+        ConfigureGameClock(modelBuilder);
     }
 
     private static void ConfigureFootballer(ModelBuilder modelBuilder)
@@ -113,6 +115,15 @@ public class GameDbContext : DbContext
         {
             entity.ToTable("Messages");
             entity.HasKey(m => m.Id);
+        });
+    }
+
+    private static void ConfigureGameClock(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<GameClock>(entity =>
+        {
+            entity.ToTable("GameClock");
+            entity.HasKey(c => c.Id);
         });
     }
 }

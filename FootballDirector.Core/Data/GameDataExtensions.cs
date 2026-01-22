@@ -17,7 +17,26 @@ public static class GameDataExtensions
     {
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<GameDbContext>();
+
+        // Check if schema is outdated (missing tables) and recreate if needed
+        // This is appropriate for development - in production you'd use migrations
+        if (db.Database.CanConnect() && !TableExists(db, "GameClock"))
+        {
+            db.Database.EnsureDeleted();
+        }
+
         db.Database.EnsureCreated();
+
+        // Initialize game clock if not present
+        if (!db.GameClock.Any())
+        {
+            db.GameClock.Add(new GameClock(
+                Id: 1,
+                CurrentDate: new DateTime(2024, 7, 1),
+                Season: 2024,
+                Phase: SeasonPhase.PreSeason));
+            db.SaveChanges();
+        }
 
         // Seed data if database is empty
         if (!db.Footballers.Any())
@@ -26,53 +45,70 @@ public static class GameDataExtensions
         }
     }
 
+    private static bool TableExists(GameDbContext db, string tableName)
+    {
+        var connection = db.Database.GetDbConnection();
+        connection.Open();
+        try
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableName}';";
+            var result = command.ExecuteScalar();
+            return result != null;
+        }
+        finally
+        {
+            connection.Close();
+        }
+    }
+
     private static void SeedData(GameDbContext db)
     {
-        // Footballers
+        // Footballers - DateOfBirth calculated so age is correct as of game start (July 1, 2024)
         db.Footballers.AddRange(
-            new Footballer(1, "Danny", "Fletcher", 27, "England",
+            new Footballer(1, "Danny", "Fletcher", new DateTime(1997, 3, 15), "England",
                 new Personality(PersonalityType.Maverick, new Backstory(
                     "Grew up on a council estate in Sheffield with a hardworking single mother.",
                     "Scoring a hat-trick on his Premier League debut as an 18-year-old substitute.",
                     "Runs a charity providing sports equipment to underprivileged schools.")),
                 "LW", 81, 92, 78, 74, 85, 45, 72),
-            new Footballer(2, "Pablo", "Moreno", 17, "Spain",
+            new Footballer(2, "Pablo", "Moreno", new DateTime(2007, 8, 22), "Spain",
                 new Personality(PersonalityType.Virtuoso, new Backstory(
                     "Raised in a working-class neighborhood near Valencia by immigrant parents.",
                     "Being scouted by a top academy at just 8 years old after a street football video went viral.",
                     "Still lives with his grandmother who taught him his first skills with a tennis ball.")),
                 "RW", 83, 88, 76, 79, 90, 32, 56),
-            new Footballer(3, "Magnus", "Lindqvist", 24, "Norway",
+            new Footballer(3, "Magnus", "Lindqvist", new DateTime(2000, 1, 8), "Norway",
                 new Personality(PersonalityType.Warrior, new Backstory(
                     "Born into a family of cross-country skiers in Trondheim who wanted him to follow tradition.",
                     "Scoring 5 goals in a cup final after his team was down 2-0 at halftime.",
                     "Practices meditation daily and is obsessed with sleep optimization and recovery routines.")),
                 "ST", 91, 89, 93, 65, 80, 45, 88),
-            new Footballer(4, "Tyler", "Chambers", 21, "England",
+            new Footballer(4, "Tyler", "Chambers", new DateTime(2003, 5, 30), "England",
                 new Personality(PersonalityType.Heartbeat, new Backstory(
                     "Grew up in Birmingham with parents who ran a local youth football club.",
                     "Captained his country's U-21 team to a European championship.",
                     "Speaks fluent German after a teenage exchange program sparked his love of languages.")),
                 "CAM", 88, 78, 82, 83, 86, 68, 78),
-            new Footballer(5, "Luuk", "de Groot", 33, "Netherlands",
+            new Footballer(5, "Luuk", "de Groot", new DateTime(1991, 11, 3), "Netherlands",
                 new Personality(PersonalityType.Mentor, new Backstory(
                     "Lost his father to illness when he was a teenager in Rotterdam.",
                     "Being released by his boyhood club as a youngster and almost giving up on football.",
                     "Plays chess competitively and uses it to sharpen his tactical reading of the game.")),
                 "CB", 89, 62, 60, 72, 55, 92, 86),
-            new Footballer(6, "Sergio", "Vidal", 28, "Spain",
+            new Footballer(6, "Sergio", "Vidal", new DateTime(1996, 4, 17), "Spain",
                 new Personality(PersonalityType.Strategist, new Backstory(
                     "Grew up in a middle-class Seville family with parents who valued education.",
                     "Winning Player of the Tournament after a dominant European Championship.",
                     "Has a degree in economics and considered becoming a financial analyst.")),
                 "CDM", 90, 58, 72, 88, 79, 88, 82),
-            new Footballer(7, "Thierry", "Dubois", 26, "France",
+            new Footballer(7, "Thierry", "Dubois", new DateTime(1998, 9, 12), "France",
                 new Personality(PersonalityType.Showman, new Backstory(
                     "Raised in the Paris suburbs by a father who coached amateur football and a mother who was a track athlete.",
                     "Becoming a World Cup winner at 20 and gracing magazine covers worldwide.",
                     "Donates his entire national team salary to charity and runs a foundation for youth athletics.")),
                 "ST", 91, 97, 89, 80, 92, 36, 78),
-            new Footballer(8, "Iker", "Ruiz", 22, "Spain",
+            new Footballer(8, "Iker", "Ruiz", new DateTime(2002, 2, 28), "Spain",
                 new Personality(PersonalityType.Introvert, new Backstory(
                     "Grew up in a small coastal town in Galicia, far from mainland football academies.",
                     "Playing over 60 matches in a single season at age 19 for club and country.",
@@ -80,9 +116,9 @@ public static class GameDataExtensions
                 "CM", 87, 72, 75, 88, 88, 72, 65)
         );
 
-        // Staff
+        // Staff - DateOfBirth calculated so age is correct as of game start (July 1, 2024)
         db.Staff.AddRange(
-            new StaffMember(100, "Roberto", "Santini", 52, "Italy",
+            new StaffMember(100, "Roberto", "Santini", new DateTime(1972, 6, 20), "Italy",
                 new Personality(PersonalityType.Strategist, new Backstory(
                     "Grew up in a small town near Milan, son of a factory worker who never missed a Sunday match.",
                     "Leading a struggling Serie B team to promotion and a domestic cup final in the same season.",
@@ -95,7 +131,7 @@ public static class GameDataExtensions
                 JudgingAbility: null, JudgingPotential: null,
                 BusinessAcumen: null, Negotiation: null,
                 Wealth: null, Ambition: null),
-            new StaffMember(101, "Yuki", "Nakamura", 38, "Japan",
+            new StaffMember(101, "Yuki", "Nakamura", new DateTime(1986, 4, 5), "Japan",
                 new Personality(PersonalityType.Virtuoso, new Backstory(
                     "Raised in Osaka by parents who ran a youth football academy.",
                     "Developing three players who went on to play for the national team.",
@@ -108,7 +144,7 @@ public static class GameDataExtensions
                 JudgingAbility: null, JudgingPotential: null,
                 BusinessAcumen: null, Negotiation: null,
                 Wealth: null, Ambition: null),
-            new StaffMember(102, "Graham", "Whitmore", 45, "England",
+            new StaffMember(102, "Graham", "Whitmore", new DateTime(1979, 10, 11), "England",
                 new Personality(PersonalityType.Mentor, new Backstory(
                     "Former professional defender who played over 400 matches in the lower leagues.",
                     "Keeping a record 12 clean sheets during his playing days in a single season.",
@@ -121,7 +157,7 @@ public static class GameDataExtensions
                 JudgingAbility: null, JudgingPotential: null,
                 BusinessAcumen: null, Negotiation: null,
                 Wealth: null, Ambition: null),
-            new StaffMember(103, "Maria", "Ferreira", 41, "Portugal",
+            new StaffMember(103, "Maria", "Ferreira", new DateTime(1983, 7, 25), "Portugal",
                 new Personality(PersonalityType.Strategist, new Backstory(
                     "Daughter of a legendary Portuguese scout who discovered several world-class talents.",
                     "Recommending a player for £500k who was later sold for £40 million.",
@@ -134,7 +170,7 @@ public static class GameDataExtensions
                 JudgingAbility: 17, JudgingPotential: 19,
                 BusinessAcumen: null, Negotiation: null,
                 Wealth: null, Ambition: null),
-            new StaffMember(104, "Anders", "Bergström", 36, "Sweden",
+            new StaffMember(104, "Anders", "Bergström", new DateTime(1988, 12, 3), "Sweden",
                 new Personality(PersonalityType.Heartbeat, new Backstory(
                     "Former sports science student who specialized in elite athlete rehabilitation.",
                     "Helping a star player return from a career-threatening injury ahead of schedule.",
@@ -147,7 +183,7 @@ public static class GameDataExtensions
                 JudgingAbility: null, JudgingPotential: null,
                 BusinessAcumen: null, Negotiation: null,
                 Wealth: null, Ambition: null),
-            new StaffMember(105, "Victoria", "Ashworth", 48, "England",
+            new StaffMember(105, "Victoria", "Ashworth", new DateTime(1976, 2, 14), "England",
                 new Personality(PersonalityType.Strategist, new Backstory(
                     "Former investment banker who fell in love with football through her children's youth teams.",
                     "Negotiating a stadium naming rights deal worth three times the previous valuation.",

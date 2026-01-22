@@ -1,3 +1,4 @@
+using FootballDirector.Core.Clock;
 using FootballDirector.Core.Data;
 using FootballDirector.Core.LLM;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,9 @@ public static class GameServiceExtensions
         // LLM
         var modelPath = Path.Combine(baseDirectory, "LLM", "LFM2.5-1.2B-Instruct-Q4_K_M.gguf");
         services.AddSingleton(new LlmTestService(modelPath));
+
+        // Game Clock
+        services.AddScoped<GameClockService>();
 
         return services;
     }

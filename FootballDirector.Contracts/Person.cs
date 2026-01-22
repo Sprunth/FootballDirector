@@ -7,6 +7,6 @@ public abstract record Person(
     int Id,
     string FirstName,
     string LastName,
-    int Age,
+    DateTime DateOfBirth,
     string Nationality,
     Personality Personality);
